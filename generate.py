@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from io import TextIOWrapper  # type checking
 import os
 import shutil
 from pathlib import Path
@@ -22,8 +21,8 @@ def process(s: str, input_path: str) -> str:
     if input_path == "generator/about.html":
         author_cards: list[str] = []
 
+        assert no_dupe_author_ids()
         with open("authors.tsv", newline="") as tsvfile:
-            assert has_no_duplicate_ids(tsvfile)
 
             reader = csv.DictReader(tsvfile, delimiter="\t")
 
@@ -40,38 +39,44 @@ def process(s: str, input_path: str) -> str:
     return output
 
 
-def has_no_duplicate_ids(tsvfile: TextIOWrapper) -> bool:
+def no_dupe_author_ids() -> bool:
     """Specification function that checks if a TextIOWrapper that should point to an authors.tsv contains any duplicate author ids.
     
     Returns whether this is false and prints out any duplicates found along the way."""
-    reader = csv.DictReader(tsvfile, delimiter="\t")
-    ids = set()
-    id_count = 0
+    # note: taking in the TextIOWrapper as a parameter instead seems to "consume" the TextIOWrapper? weird.
+    with open("authors.tsv", newline="") as tsvfile:
+        reader = csv.DictReader(tsvfile, delimiter="\t")
+        ids = set()
+        id_count = 0
 
-    for author_row in reader:
-        id = author_row["id"]
-        if id in ids:
-            print(f"duplicate id near line {id_count+2}: {id}")
-        ids.add(id)
-        id_count += 1
+        for author_row in reader:
+            id = author_row["id"]
+            if id in ids:
+                print(f"duplicate id near line {id_count+2}: {id}")
+            ids.add(id)
+            id_count += 1
 
-    return len(ids) == id_count
+        return len(ids) == id_count
 
 
 def generate_author_profiles():
+    assert no_dupe_author_ids()
     with open("authors.tsv", newline="") as tsvfile:
-        assert has_no_duplicate_ids(tsvfile)
         reader = csv.DictReader(tsvfile, delimiter="\t")
 
         for author_row in reader:
             author_fpath = f"docs{os.sep}authors{os.sep}" + author_row["name"] + ".html"
             author_template = f"templates{os.sep}generic_author_profile.html"
+            webpage_template = f"templates{os.sep}generic_webpage.html"
             with (
                 open(author_fpath, "w") as output,
-                open(author_template, "r") as template,
+                open(author_template, "r") as author_template,
+                open(webpage_template, "r") as webpage_template,
             ):
                 output.write(
-                    template.read().format(
+                    webpage_template.read().format(
+                        generic_webpage_CONTENT=author_template.read()
+                    ).format(
                         AuthorImage=author_row["image"],
                         AuthorImageAltText=author_row["image_alt"],
                         AuthorPronouns=author_row["pronouns"],
@@ -84,6 +89,8 @@ def generate_author_profiles():
                         AuthorName=author_row["name"],
                         AuthorBio=author_row["bio"],
                         AuthorPrevArticles="{AuthorPrevArticles}",
+                    ).format(
+                        AuthorPrevArticles="TEMP"
                     )
                 )
 
