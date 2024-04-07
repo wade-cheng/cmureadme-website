@@ -15,17 +15,19 @@ with (Path("templates") / "generic_webpage.html").open() as generic:
 def process(s: str, input_path: str) -> str:
     output = GENERIC_WEBSITE_TEMPLATE.format(generic_webpage_CONTENT=content)
 
-    # TODO support multiple passes: while {.*} in output, feed back into loop below
+    # TODO support multiple passes: while {.*} in output, feed back into loop below?
 
     print("input path: " + input_path)
     if input_path == "generator/about.html":
         author_cards: list[str] = []
 
         with open("authors.tsv", newline="") as csvfile:
-            reader = csv.DictReader(csvfile)
+            reader = csv.DictReader(csvfile, delimiter="\t")
 
             for author_row in reader:
-                author_card = ""
+                author_cards.append(
+                    f'<p><a href="/authors/{author_row["name"]}.html">{author_row["name"]}</a></p>'
+                )
 
         output = output.format(about_AUTHORS="\n".join(author_cards))
         # TODO all this
