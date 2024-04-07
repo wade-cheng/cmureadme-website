@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from io import TextIOWrapper  # type checking
 import os
 import shutil
 from pathlib import Path
@@ -21,8 +22,10 @@ def process(s: str, input_path: str) -> str:
     if input_path == "generator/about.html":
         author_cards: list[str] = []
 
-        with open("authors.tsv", newline="") as csvfile:
-            reader = csv.DictReader(csvfile, delimiter="\t")
+        with open("authors.tsv", newline="") as tsvfile:
+            assert has_no_duplicate_ids(tsvfile)
+
+            reader = csv.DictReader(tsvfile, delimiter="\t")
 
             for author_row in reader:
                 author_cards.append(
@@ -37,9 +40,28 @@ def process(s: str, input_path: str) -> str:
     return output
 
 
+def has_no_duplicate_ids(tsvfile: TextIOWrapper) -> bool:
+    """Specification function that checks if a TextIOWrapper that should point to an authors.tsv contains any duplicate author ids.
+    
+    Returns whether this is false and prints out any duplicates found along the way."""
+    reader = csv.DictReader(tsvfile, delimiter="\t")
+    ids = set()
+    id_count = 0
+
+    for author_row in reader:
+        id = author_row["id"]
+        if id in ids:
+            print(f"duplicate id near line {id_count+2}: {id}")
+        ids.add(id)
+        id_count += 1
+
+    return len(ids) == id_count
+
+
 def generate_author_profiles():
-    with open("authors.tsv", newline="") as csvfile:
-        reader = csv.DictReader(csvfile, delimiter="\t")
+    with open("authors.tsv", newline="") as tsvfile:
+        assert has_no_duplicate_ids(tsvfile)
+        reader = csv.DictReader(tsvfile, delimiter="\t")
 
         for author_row in reader:
             author_fpath = f"docs{os.sep}authors{os.sep}" + author_row["name"] + ".html"
