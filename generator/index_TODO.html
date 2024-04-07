@@ -1,0 +1,350 @@
+<!-- TODO
+IMPLEMENT .FORMAT ON ALL THOSE FORMAT THINGS I GUESS
+
+
+-->
+<style>
+  /* Custom CSS for the image and overlay text */
+  .image-container {
+    position: relative;
+    overflow: hidden;
+    max-width: 100%;
+  }
+
+  .image-container img {
+    width: 100%;
+    height: auto;
+  }
+
+  .overlay-text {
+    position: absolute;
+    background-color: rgba(0, 0, 0,0.0);
+    color: #000;
+    padding: 10px;
+    font-size: 16px;
+    transform: rotate(-45deg);
+    transform-origin: center;
+  }
+
+  .image-container:hover .overlay-text {
+    opacity: 1;
+  }
+
+  /* Text positions */
+  .position-1 {
+    top: 13%;
+    left: 10px;
+  }
+
+  .position-2 {
+    top: 13%;
+    right: 5%;
+  }
+
+  .position-3 {
+    bottom: 10%;
+    left: 10px;
+  }
+
+  .position-4 {
+    bottom: 10%;
+    right: 5%;
+  }
+
+  .position-5 {
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+
+  .position-6 {
+    bottom: 25%;
+    left: 50%;
+    transform: translate(-50%, 50%) rotate(-45deg);
+  }
+  .social {
+    margin-right: 7px;
+  }
+
+  .btn .fa {
+    margin-right: 10px;
+  }
+</style>
+<style>
+  /* Custom Styles */
+  .carousel-button-container {
+    position: absolute;
+    top: 10px; /* Adjust as needed */
+    right: 10px; /* Adjust as needed */
+    z-index: 2;
+  }
+
+  .carousel-caption {
+    position: static; /* Override default position to be below image */
+    background: rgba(255, 255, 255, 0.7); /* Semi-transparent background */
+    color: #333; /* Text color */
+  }
+
+  .carousel-indicators [data-bs-target] {
+    background-color: #777; /* Active indicator color */
+  }
+
+  .carousel-indicators .active {
+    background-color: #333; /* Indicator color */
+  }
+  .carousel-item img {
+    max-width: 100%; /* Responsive image width */
+    max-height: 400px; /* Maximum height */
+    object-fit: contain; /* Preserve aspect ratio */
+    margin: auto; /* Center the image if it's smaller than container */
+  }
+</style>
+
+<div class="d-flex justify-content-between align-items-end mt-5">
+  <h1>Latest Issue</h1>
+  <p id="latestDate">Jan 1, 1970</p> 
+</div>
+
+<hr>
+
+<div class="row">
+  <div class="col-lg-8 p-4 p-md-5 mb-4  flex-column g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+    <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1" id="slide1Button" style="{slide1Buttontyle}"></button>
+        <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="1" aria-label="Slide 2" id="slide2Button" style="{slide2Buttontyle}"></button>
+        <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="2" aria-label="Slide 3" id="slide3Button" style="{slide3Buttontyle}"></button>
+      </div>
+          
+      <div class="carousel-inner">
+      <div class="carousel-item active" id="slide1" style="{slide1Style}">
+        <a href="{slide1Link}" style="text-decoration:none"><img src="{slide1Image}" class="d-block w-100" alt="...">
+          <div class="carousel-caption d-md-block">
+              <h5>{slideHeadline1}</h5>
+              <p>{slideSummary1}</p>
+          </div>
+        </a>
+      </div>
+      <div class="carousel-item" id="slide2" style="{slide2Style}">
+        <a href="{slide2Link}" style="text-decoration:none" ><img src="{slide2Image}" class="d-block w-100" alt="...">
+        <div class="carousel-caption d-md-block">
+          <h5>{slideHeadline2}</h5>
+          <p>{slideSummary2}</p>
+        </div></a>
+      </div>
+      <div class="carousel-item" id="slide3" style="{slide3Style}">
+        <a href="{slide3Link}" style="text-decoration:none" ><img src="{slide3Image}" class="d-block w-100" alt="...">
+          <div class="carousel-caption d-md-block">
+            <h5>{slideHeadline3}</h5>
+            <p>{slideSummary3}</p>
+          </div></a>
+      </div>
+    </div>
+    <!-- Controls -->
+    <div class="carousel-button-container">
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div> 
+  </div>
+</div>        
+
+<div class="col-md-4 p-4 p-md-5 mb-4">
+    <h3>More from this issue:</h3>
+    <hr/>
+    <ul class="list-unstyled h-100">
+        <li id="sideBar1" style="{sideBar1Style}">
+          <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-2 link-body-emphasis text-decoration-none border-top" href="{sideBarLink1}">
+            <img src="{sideBarImg1}" width="96" height="96" class="img-fluid" alt="Responsive image">                        <div class="col-lg-8">
+              <div class="col-lg-8">
+                  <h6 class="mb-0">{sideHeadline1}</h6>
+                  <small class="text-body-secondary">{sideDate1}</small>
+                </div>
+              </a>
+            </li>
+            <li id="sideBar2" style="{sideBar2Style}">
+              <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-2 link-body-emphasis text-decoration-none border-top" href="{sideBarLink2}">
+                <img src="{sideBarImg2}" width="96" height="96" class="img-fluid" alt="Responsive image">                        <div class="col-lg-8">
+                  <h6 class="mb-0">{sideHeadline2}</h6>
+                  <small class="text-body-secondary">{sideDate2}</small>
+                </div>
+              </a>
+            </li>
+            <li id="sideBar3" style="{sideBar3Style}">
+                <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-2 link-body-emphasis text-decoration-none border-top" href="{sideBarLink3}">
+                  <img src="{sideBarImg3}" width="96" height="96" class="img-fluid" alt="Responsive image">                        
+                  <div class="col-lg-8">
+                    <div class="col-lg-8">
+                    <h6 class="mb-0">{sideHeadline3}</h6>
+                    <small class="text-body-secondary">{sideDate3}</small>
+                  </div>
+                </a>
+              </li>
+        </ul>
+    </div>
+    <div class="row mb-2">
+        <div class="col-md-6" id="bottom1" style="{bottom1Style}">
+          <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+            <div class="col p-4 d-flex flex-column position-static">
+              <strong class="d-inline-block mb-2 text-primary-emphasis">{bottomCategory1}</strong>
+              <h3 class="mb-0">{bottomHeadline1}</h3>
+              <div class="mb-1 text-body-secondary">{bottomDate1}</div>
+              <p class="card-text mb-auto">{bottomSummary1}</p>
+              <a href="{bottom1Link}" class="icon-link gap-1 icon-link-hover stretched-link">
+                Continue reading
+                <svg class="bi"><use xlink:href="#chevron-right"/></svg>
+              </a>
+            </div>
+            <div class="col-auto d-none d-lg-block">
+              <img src="{bottomImg1}" width="200" height="200" class="img-fluid" alt="Responsive image">                               </div>
+          </div>
+        </div>
+        <div class="col-md-6" id="bottom2" style="{bottom2Style}">
+          <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+            <div class="col p-4 d-flex flex-column position-static">
+              <strong class="d-inline-block mb-2 text-success-emphasis">{bottomCategory2}</strong>
+              <h3 class="mb-0">{bottomHeadline2}</h3>
+              <div class="mb-1 text-body-secondary">{bottomDate2}</div>
+              <p class="mb-auto">{bottomSummary2}</p>
+              <a href="{bottom2Link}" class="icon-link gap-1 icon-link-hover stretched-link">
+                Continue reading
+                <svg class="bi"><use xlink:href="#chevron-right"/></svg>
+              </a>
+            </div>
+            <div class="col-auto d-none d-lg-block">
+              <img src="{bottomImg2}" width="200" height="200" class="img-fluid" alt="Responsive image">                               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <!--div class="d-flex justify-content-between align-items-end mt-5">
+        <h1>More Stories</h1>
+        <p>Various Issues</p> 
+    </div>
+    <hr/>
+    <div class="row">
+      <div class="col-md-4 p-4 mb-4">
+        <h3>Throwback Reads</h3>
+        <hr/>
+          <ul class="list-unstyled h-100">
+            <li>
+              <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-2 link-body-emphasis text-decoration-none border-top" href="#">
+                <svg class="bd-placeholder-img" width="100%" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
+                <div class="col-lg-8">
+                  <h6 class="mb-0">Example blog post title</h6>
+                  <small class="text-body-secondary">January 15, 2023</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-2 link-body-emphasis text-decoration-none border-top" href="#">                      <svg class="bd-placeholder-img" width="100%" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
+              <div class="col-lg-8">
+                <h6 class="mb-0">This is another blog post title</h6>
+                <small class="text-body-secondary">January 14, 2023</small>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-2 link-body-emphasis text-decoration-none border-top" href="#">
+              <svg class="bd-placeholder-img" width="100%" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
+              <div class="col-lg-8">
+                <h6 class="mb-0">This is another blog post title</h6>
+                <small class="text-body-secondary">January 14, 2023</small>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-2 link-body-emphasis text-decoration-none border-top" href="#">
+              <svg class="bd-placeholder-img" width="100%" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
+              <div class="col-lg-8">
+                <h6 class="mb-0">This is another blog post title</h6>
+                <small class="text-body-secondary">January 14, 2023</small>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-8">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm bg-body-secondary h-md-250 position-relative">
+              <div class="col p-4 d-flex flex-column position-static">
+                <strong class="d-inline-block mb-2 text-success-emphasis">Category</strong>
+                <h3 class="mb-0">More Posts</h3>
+                <div class="mb-1 text-body-secondary">Nov 11</div>
+                <p class="mb-auto">Article Summary of First Sentence of Article. More rows added as necessary</p>
+                <a href="#" class="icon-link gap-1 icon-link-hover stretched-link">
+                  Continue reading
+                  <svg class="bi"><use xlink:href="#chevron-right"/></svg>
+                </a>
+              </div>
+              <div class="col-auto d-flex align-items-center justify-content-center me-2">
+                <img src="/assets/images/readme_logo.png"
+                width="auto" height="180" class="center" alt=""/>                      
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm bg-body-secondary h-md-250 position-relative">
+              <div class="col p-4 d-flex flex-column position-static">
+                <strong class="d-inline-block mb-2 text-success-emphasis">Category</strong>
+                <h3 class="mb-0">More Posts</h3>
+                <div class="mb-1 text-body-secondary">Nov 11</div>
+                <p class="mb-auto">Article Summary of First Sentence of Article. More rows added as necessary</p>
+                <a href="#" class="icon-link gap-1 icon-link-hover stretched-link">
+                  Continue reading
+                  <svg class="bi"><use xlink:href="#chevron-right"/></svg>
+                </a>
+              </div>
+              <div class="col-auto d-flex align-items-center justify-content-center me-2">
+                <img src="/assets/images/readme_logo.png"
+                width="auto" height="180" class="center" alt=""/>                      
+              </div>
+            </div>
+          </div>
+        </div>  
+        <div class="row">
+          <div class="col-md-6">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm bg-body-secondary h-md-250 position-relative">
+              <div class="col p-4 d-flex flex-column position-static">
+                <strong class="d-inline-block mb-2 text-success-emphasis">Category</strong>
+                <h3 class="mb-0">More Posts</h3>
+                <div class="mb-1 text-body-secondary">Nov 11</div>
+                <p class="mb-auto">Article Summary of First Sentence of Article. More rows added as necessary</p>
+                <a href="#" class="icon-link gap-1 icon-link-hover stretched-link">
+                  Continue reading
+                  <svg class="bi"><use xlink:href="#chevron-right"/></svg>
+                </a>
+              </div>
+              <div class="col-auto d-flex align-items-center justify-content-center me-2">
+                <img src="/assets/images/readme_logo.png"
+                width="auto" height="180" class="center" alt=""/>                      
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm bg-body-secondary h-md-250 position-relative">
+              <div class="col p-4 d-flex flex-column position-static">
+                <strong class="d-inline-block mb-2 text-success-emphasis">Category</strong>
+                <h3 class="mb-0">More Posts</h3>
+                <div class="mb-1 text-body-secondary">Nov 11</div>
+                <p class="mb-auto">Article Summary of First Sentence of Article. More rows added as necessary</p>
+                <a href="#" class="icon-link gap-1 icon-link-hover stretched-link">
+                  Continue reading
+                  <svg class="bi"><use xlink:href="#chevron-right"/></svg>
+                </a>
+              </div>
+              <div class="col-auto d-flex align-items-center justify-content-center me-2">
+                <img src="/assets/images/readme_logo.png"
+                width="auto" height="180" class="center" alt=""/>                      
+              </div>
+            </div>
+          </div> 
+        </div>  
+      </div>
+    </div-->
