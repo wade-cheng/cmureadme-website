@@ -54,4 +54,4 @@ for root, dirs, files in os.walk("generator"):
         ):
             content = f_in.read()
             output = process(content, INPUT_PATH)
-            # f_out.write(output) # TODO uncomment when ready
+            f_out.write(output)
