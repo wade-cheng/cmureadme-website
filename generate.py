@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import toml
+import glob
 import os
 import shutil
 from pathlib import Path
@@ -41,7 +43,7 @@ def process(s: str, input_path: str) -> str:
 
 def no_dupe_author_ids() -> bool:
     """Specification function that checks if a TextIOWrapper that should point to an authors.tsv contains any duplicate author ids.
-    
+
     Returns whether this is false and prints out any duplicates found along the way."""
     # note: taking in the TextIOWrapper as a parameter instead seems to "consume" the TextIOWrapper? weird.
     with open("authors.tsv", newline="") as tsvfile:
@@ -74,9 +76,9 @@ def generate_author_profiles():
                 open(webpage_template, "r") as webpage_template,
             ):
                 output.write(
-                    webpage_template.read().format(
-                        generic_webpage_CONTENT=author_template.read()
-                    ).format(
+                    webpage_template.read()
+                    .format(generic_webpage_CONTENT=author_template.read())
+                    .format(
                         AuthorImage=author_row["image"],
                         AuthorImageAltText=author_row["image_alt"],
                         AuthorPronouns=author_row["pronouns"],
@@ -89,15 +91,70 @@ def generate_author_profiles():
                         AuthorName=author_row["name"],
                         AuthorBio=author_row["bio"],
                         AuthorPrevArticles="{AuthorPrevArticles}",
-                    ).format(
-                        AuthorPrevArticles="TEMP"
                     )
+                    .format(AuthorPrevArticles="TEMP")
                 )
 
 
-for root, dirs, files in os.walk("generator"):
-    generate_author_profiles()
+def generate_articles():
+    for article_path in glob.glob(f"articles{os.sep}*{os.sep}*"):
+        article_meta_path = article_path + os.sep + "metadata.toml"
+        print(article_path)
 
+        with open(article_meta_path, "r") as t:
+            article_metadata = toml.loads(t.read())
+            
+        # fill out `articles` variable (below)
+        # TODO (also this breaks if any invariant is wrong such as ids in tomls being misplaced.)
+        # if article_metadata["author"] not in articles:
+        #     articles[article_metadata["author"]] = []
+        # articles[article_metadata["author"]] = articles[
+        #     article_metadata["author"]
+        # ].append(article_path)
+
+        # generate
+        print(article_metadata)
+        if article_metadata["type"] == "article":
+            docs_path = "docs" + os.sep + article_path
+            os.makedirs(docs_path, exist_ok=True)
+            shutil.copytree(article_path, docs_path, dirs_exist_ok=True)
+
+            with open(article_path + os.sep + article_metadata["path"], "r") as f:
+                html_content = f.read()
+            with (
+                open(f"templates{os.sep}generic_article.html") as article,
+                open(f"templates{os.sep}generic_webpage.html") as webpage,
+                open(docs_path + os.sep + article_metadata["path"], "r") as read_f,
+            ):
+                
+                article_formatted = webpage.read().format(generic_webpage_CONTENT=article.read())
+                # print(article_formatted)
+                article_formatted = article_formatted.replace("{articleCategory}", "temp")
+                article_formatted = article_formatted.replace("{articleTitle}", "temp")
+                article_formatted = article_formatted.replace("{articlePublishDate}", "temp")
+                article_formatted = article_formatted.replace("{articleSummary}", "temp")
+                article_formatted = article_formatted.replace("{articleAuthor}", "temp")
+                article_formatted = article_formatted.replace("{articleThumbnailUrl}", "temp")
+                article_formatted = article_formatted.replace("{articleThumbnailAltText}", "temp")
+                article_formatted = article_formatted.replace("{articleBody}", read_f.read())
+            with open(docs_path + os.sep + article_metadata["path"], "w") as write_f:
+                write_f.write(article_formatted)
+            os.remove(f"docs{os.sep}{article_meta_path}")
+        elif article_metadata["type"] == "art":
+            print("TODO ART IS NOT IMPLEMENTED")
+            pass
+
+
+# a hashmap from author ids to author names
+authors_id_names: dict[str, str] = dict()  # TODO FILL THIS
+generate_author_profiles()
+
+# a hashmap from article author ids to the paths of articles they've written (eg ["articles/issue_001/scottygame"])
+articles: dict[str, list[str]] = dict()
+generate_articles()
+print(f"got articles: {articles}")
+
+for root, dirs, files in os.walk("generator"):
     for filename in files:
         # the dir fstring takes our walk and spits out which dir the current file lives in.
         # eg, a file at "generator/assets/images/img.png" turns to "{WEBSITE_ROOT}/assets/images/img.png"
