@@ -97,6 +97,10 @@ def generate_author_profiles():
 
 
 def generate_articles():
+    # reset past articles webpage first
+    with open(f"generator{os.sep}past.html", "w") as f:
+        f.write("")
+
     for article_path in glob.glob(f"articles{os.sep}*{os.sep}*"):
         article_meta_path = article_path + os.sep + "metadata.toml"
         print(article_path)
@@ -140,6 +144,9 @@ def generate_articles():
             with open(docs_path + os.sep + article_metadata["path"], "w") as write_f:
                 write_f.write(article_formatted)
             os.remove(f"docs{os.sep}{article_meta_path}")
+
+            with open(f"generator{os.sep}past.html", "a") as past:
+                past.write(f"<a href='{article_path + os.sep + article_metadata['path']}'>{article_path + os.sep + article_metadata['path']}</a><br>")
         elif article_metadata["type"] == "art":
             print("TODO ART IS NOT IMPLEMENTED")
             pass
