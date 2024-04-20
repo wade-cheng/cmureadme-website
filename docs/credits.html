@@ -13,7 +13,7 @@
     <link href="https://fonts.googltext-dark eapis.com/css2?family=Alegreya+Sans:wght@700;800&family=Cutive+Mono&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
   </head>
-  <body>
+  <body style="background-image: url('/assets/images/readme_logo.png');">
     <header class="container-fluid lh-1 py-3">
       <div class="row flex-nowrap justify-content-between align-items-center">
       <div class="col-4 pt-1">
@@ -47,16 +47,61 @@
     </header>
 
     <div class="container-lg">
-      <p>me working on the CMU README website instead of calclus homework:</p>
-<img src="/assets/images/expanding_brain.jpg" alt="an image of the expanding brain meme">
-<hr>
+      <!-- {generic_webpage_CONTENT} -->
     </div>
+    <img src="/assets/images/readme_logo.png" alt="Image Description" id="bouncer" style="position: absolute;"/>
+
+    <script>
+function randint(start, stop) {
+    return Math.floor(Math.random() * (stop - start) + start);
+}
+
+const CONTENT_ID_TO_ANIMATE = "bouncer";
+
+let DOC_WIDTH = document.body.clientWidth;
+let DOC_HEIGHT = window.innerHeight; // others height values are wrong for some reason
+const CONTENT_WIDTH = document.getElementById(CONTENT_ID_TO_ANIMATE).offsetWidth;
+const CONTENT_HEIGHT = document.getElementById(CONTENT_ID_TO_ANIMATE).offsetHeight;
+
+// Optional. If off, will have wrong dimensions on resize.
+addEventListener('resize', (event) => {
+    DOC_WIDTH = document.body.clientWidth;
+    DOC_HEIGHT = window.innerHeight;
+});
+
+let movingContent = document.getElementById(CONTENT_ID_TO_ANIMATE);
+
+let x = DOC_WIDTH / 2 - CONTENT_WIDTH / 2; // Set to starting position. During animation, this is current position.
+let y = randint(0, DOC_HEIGHT - CONTENT_HEIGHT / 2);
+let dx = 1; // change in x per frame
+let dy = Math.random() > 0.5 ? 1 : -1;  // randomly, -1 or 1
+let move = function () {
+    if (x > DOC_WIDTH - CONTENT_WIDTH - 1) {  // 1 is buffer
+        dx = -1;
+    } else if (x < 0) {
+        dx = 1;
+    }
+
+    if (y > DOC_HEIGHT - CONTENT_HEIGHT - 1) {
+        dy = -1;
+    } else if (y < 0) {
+        dy = 1;
+    }
+    x += dx;
+    y += dy
+    console.log(`x,y is ${x}, ${y}`)
+    movingContent.style.left = x + "px";
+    movingContent.style.top = y + "px";
+};
+setInterval(move, 10);
+
+    </script>
 
     <footer class="py-5 text-body-secondary bg-dark container">
       <div class="row text-center d-flex justify-content-center align-items-center">
         <div class="position-relative col-md-3">
           <img src="/assets/images/readme_logo.png" alt="Image Description" class="img-fluid" />
-          <h2 class="text-white" style="font-size: 1em; text-align: left; margin-top: 1em; padding-top: 0em; font-family: Arial, Helvetica, sans-serif;">Logo by Evie Park</h2>
+          <h2 class="text-white" style="font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; font-size: 100px;">Logo by Evie Park</h2>
         </div>
         <div class="position-relative col-md-3">
           <h2 class="text-white" style="text-align: left; font-family: Cutive Mono;">README, by CMU KGB</h2>
