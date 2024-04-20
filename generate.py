@@ -141,6 +141,7 @@ def generate_articles():
                 article_formatted = article_formatted.replace("{articleThumbnailUrl}", "temp")
                 article_formatted = article_formatted.replace("{articleThumbnailAltText}", "temp")
                 article_formatted = article_formatted.replace("{articleBody}", read_f.read())
+                article_formatted = article_formatted.replace("max-width:468pt;", "")  # not sure why this is here but i'm fairly sure it comes from the google drive html export
             with open(docs_path + os.sep + article_metadata["path"], "w") as write_f:
                 write_f.write(article_formatted)
             os.remove(f"docs{os.sep}{article_meta_path}")
