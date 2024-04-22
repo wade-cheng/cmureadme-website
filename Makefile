@@ -4,6 +4,5 @@ all:
 clean:
 	# not implemented
 
-# server:
-# 	cd docs
-# 	python3 -m http.server 
+serve:
+	# python3 -m http.server 

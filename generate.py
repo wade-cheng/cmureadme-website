@@ -42,7 +42,7 @@ def process(s: str, input_path: str) -> str:
 
 
 def no_dupe_author_ids() -> bool:
-    """Specification function that checks if a TextIOWrapper that should point to an authors.tsv contains any duplicate author ids.
+    """Specification function that checks if authors.tsv contains any duplicate author ids.
 
     Returns whether this is false and prints out any duplicates found along the way."""
     # note: taking in the TextIOWrapper as a parameter instead seems to "consume" the TextIOWrapper? weird.
@@ -67,6 +67,9 @@ def generate_author_profiles():
         reader = csv.DictReader(tsvfile, delimiter="\t")
 
         for author_row in reader:
+            # we fill authors_id_names
+            authors_id_names[author_row["id"]] = author_row["name"]
+
             author_fpath = f"docs{os.sep}authors{os.sep}" + author_row["name"] + ".html"
             author_template = f"templates{os.sep}generic_author_profile.html"
             webpage_template = f"templates{os.sep}generic_webpage.html"
@@ -103,21 +106,17 @@ def generate_articles():
 
     for article_path in glob.glob(f"articles{os.sep}*{os.sep}*"):
         article_meta_path = article_path + os.sep + "metadata.toml"
-        print(article_path)
 
         with open(article_meta_path, "r") as t:
             article_metadata = toml.loads(t.read())
             
         # fill out `articles` variable (below)
         # TODO (also this breaks if any invariant is wrong such as ids in tomls being misplaced.)
-        # if article_metadata["author"] not in articles:
-        #     articles[article_metadata["author"]] = []
-        # articles[article_metadata["author"]] = articles[
-        #     article_metadata["author"]
-        # ].append(article_path)
+        if article_metadata["author"] not in articles:
+            articles[article_metadata["author"]] = []
+        articles[article_metadata["author"]].append(article_path)
 
         # generate
-        print(article_metadata)
         if article_metadata["type"] == "article":
             docs_path = "docs" + os.sep + article_path
             os.makedirs(docs_path, exist_ok=True)
