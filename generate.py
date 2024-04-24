@@ -15,7 +15,8 @@ with (Path("templates") / "generic_webpage.html").open() as generic:
 
 
 def process(s: str, input_path: str) -> str:
-    output = GENERIC_WEBSITE_TEMPLATE.format(generic_webpage_CONTENT=content)
+    output = GENERIC_WEBSITE_TEMPLATE
+    output = output.replace("{generic_webpage_CONTENT}", content)
 
     # TODO support multiple passes: while {.*} in output, feed back into loop below?
 
@@ -30,10 +31,18 @@ def process(s: str, input_path: str) -> str:
 
             for author_row in reader:
                 author_cards.append(
-                    f'<p><a href="/authors/{author_row["name"]}.html">{author_row["name"]}</a></p>'
+                    f"""
+<td>
+  <a class="person-link" href="/authors/{author_row["name"]}.html">
+    <img src="" title="Headshot" width="200px" height=200px>
+    <br>
+    <b>{author_row["name"]}</b>
+  </a>
+</td>
+"""
                 )
 
-        output = output.format(about_AUTHORS="\n".join(author_cards))
+        output = output.replace("{about_AUTHORS}", "\n".join(author_cards))
         # TODO all this
     elif input_path == "etc etc":
         output = output
@@ -78,25 +87,25 @@ def generate_author_profiles():
                 open(author_template, "r") as author_template,
                 open(webpage_template, "r") as webpage_template,
             ):
-                output.write(
-                    webpage_template.read()
-                    .format(generic_webpage_CONTENT=author_template.read())
-                    .format(
-                        AuthorImage=author_row["image"],
-                        AuthorImageAltText=author_row["image_alt"],
-                        AuthorPronouns=author_row["pronouns"],
-                        AuthorMajor=author_row["major"],
-                        AuthorYear=author_row["year"],
-                        AuthorLocation=author_row["location"],
-                        AuthorFact=author_row["fact"],
-                        AuthorEmail=author_row["email"],
-                        OtherSocials=author_row["other_socials"],
-                        AuthorName=author_row["name"],
-                        AuthorBio=author_row["bio"],
-                        AuthorPrevArticles="{AuthorPrevArticles}",
-                    )
-                    .format(AuthorPrevArticles="TEMP")
-                )
+                # fmt: off
+                article_formatted = webpage_template.read()
+                article_formatted = article_formatted.replace("{generic_webpage_CONTENT}", author_template.read())
+                article_formatted = article_formatted.replace("{AuthorImage}", author_row["image"])
+                article_formatted = article_formatted.replace("{AuthorImageAltText}", author_row["image_alt"])
+                article_formatted = article_formatted.replace("{AuthorPronouns}", author_row["pronouns"])
+                article_formatted = article_formatted.replace("{AuthorMajor}", author_row["major"])
+                article_formatted = article_formatted.replace("{AuthorYear}", author_row["year"])
+                article_formatted = article_formatted.replace("{AuthorLocation}", author_row["location"])
+                article_formatted = article_formatted.replace("{AuthorFact}", author_row["fact"])
+                article_formatted = article_formatted.replace("{AuthorEmail}", author_row["email"])
+                article_formatted = article_formatted.replace("{OtherSocials}", author_row["other_socials"])
+                article_formatted = article_formatted.replace("{AuthorName}", author_row["name"])
+                article_formatted = article_formatted.replace("{AuthorBio}", author_row["bio"])
+                article_formatted = article_formatted.replace("{AuthorPrevArticles}", "{AuthorPrevArticles}")
+
+                article_formatted = article_formatted.replace("{AuthorPrevArticles}", "TEMP")
+                output.write(article_formatted)
+                # fmt: on
 
 
 def generate_articles():
@@ -109,7 +118,7 @@ def generate_articles():
 
         with open(article_meta_path, "r") as t:
             article_metadata = toml.loads(t.read())
-            
+
         # fill out `articles` variable (below)
         # TODO (also this breaks if any invariant is wrong such as ids in tomls being misplaced.)
         if article_metadata["author"] not in articles:
@@ -129,8 +138,9 @@ def generate_articles():
                 open(f"templates{os.sep}generic_webpage.html") as webpage,
                 open(docs_path + os.sep + article_metadata["path"], "r") as read_f,
             ):
-                
-                article_formatted = webpage.read().format(generic_webpage_CONTENT=article.read())
+                # fmt: off
+                article_formatted = webpage.read()
+                article_formatted = article_formatted.replace("{generic_webpage_CONTENT}", article.read())
                 # print(article_formatted)
                 article_formatted = article_formatted.replace("{articleCategory}", "temp")
                 article_formatted = article_formatted.replace("{articleTitle}", "temp")
@@ -141,12 +151,15 @@ def generate_articles():
                 article_formatted = article_formatted.replace("{articleThumbnailAltText}", "temp")
                 article_formatted = article_formatted.replace("{articleBody}", read_f.read())
                 article_formatted = article_formatted.replace("max-width:468pt;", "")  # not sure why this is here but i'm fairly sure it comes from the google drive html export
+                # fmt: on
             with open(docs_path + os.sep + article_metadata["path"], "w") as write_f:
                 write_f.write(article_formatted)
             os.remove(f"docs{os.sep}{article_meta_path}")
 
             with open(f"generator{os.sep}past.html", "a") as past:
-                past.write(f"<a href='{article_path + os.sep + article_metadata['path']}'>{article_path + os.sep + article_metadata['path']}</a><br>")
+                past.write(
+                    f"<a href='{article_path + os.sep + article_metadata['path']}'>{article_path + os.sep + article_metadata['path']}</a><br>"
+                )
         elif article_metadata["type"] == "art":
             print("TODO ART IS NOT IMPLEMENTED")
             pass

@@ -12,6 +12,46 @@
     <link href="https://fonts.googleapis.com/css?family=Playfair&#43;Display:700,900&amp;display=swap" rel="stylesheet">
     <link href="https://fonts.googltext-dark eapis.com/css2?family=Alegreya+Sans:wght@700;800&family=Cutive+Mono&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <style>
+      .person-link {
+        color: black;
+        text-decoration: none;
+        font-weight: bold;
+      }
+  
+      .person-link:hover {
+        text-decoration: underline;
+        font-weight: normal;
+        color: #7AF;
+      }
+  
+      .navbar-nav a {
+        margin: 0;
+        padding: 10px;
+      }
+  
+      .navbar-nav a:hover {
+        background-color: darkgray;
+        margin-left: -10px;
+        margin-right: -10px;
+        margin-top: -15px;
+        margin-bottom: -15px;
+        padding-bottom: 15px;
+        padding-top: 15px;
+        padding-left: 10px;
+        padding-right: 10px;
+        vertical-align: middle;
+        font-family: Papyrus, fantasy;
+        text-align: center;
+      }
+  
+      td {
+        float: left;
+        margin-left: 3.25%;
+        margin-right: 3.25%;
+      }
+    </style>
   </head>
   <body>
     <header class="container-fluid lh-1 py-3">
@@ -35,7 +75,7 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
-            <div class="navbar-nav">
+            <div class="navbar-nav" style="a:hover {background-color: white;}">
               <a href="/index.html" class="text-dark nav-item nav-link mx-2">News</a>
               <a href="/about.html" class="text-dark nav-item nav-link mx-2">About</a>
               <a href="/past.html" class="text-dark nav-item nav-link mx-2">Past Issues</a>
