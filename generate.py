@@ -29,12 +29,18 @@ def process(s: str, input_path: str) -> str:
 
             reader = csv.DictReader(tsvfile, delimiter="\t")
 
+            AUTHOR_IMG_PATH = "/assets/images/authors/"
+
             for author_row in reader:
+                try:
+                    AUTHOR_SRC = glob.glob('docs'+AUTHOR_IMG_PATH+author_row['id']+'*')[0].replace("docs", "", 1)
+                except:
+                    AUTHOR_SRC = "MissingNo."
                 author_cards.append(
                     f"""
 <td>
   <a class="person-link" href="/authors/{author_row["name"]}.html">
-    <img src="" title="Headshot" width="200px" height=200px>
+    <img src="{AUTHOR_SRC}" title="Headshot" width="200px" height=200px>
     <br>
     <b>{author_row["name"]}</b>
   </a>
@@ -87,10 +93,16 @@ def generate_author_profiles():
                 open(author_template, "r") as author_template,
                 open(webpage_template, "r") as webpage_template,
             ):
+                AUTHOR_IMG_PATH = "/assets/images/authors/"
+                try:
+                    AUTHOR_SRC = glob.glob('docs'+AUTHOR_IMG_PATH+author_row['id']+'*')[0].replace("docs", "", 1)
+                except:
+                    AUTHOR_SRC = "MissingNo."
+
                 # fmt: off
                 article_formatted = webpage_template.read()
                 article_formatted = article_formatted.replace("{generic_webpage_CONTENT}", author_template.read())
-                article_formatted = article_formatted.replace("{AuthorImage}", author_row["image"])
+                article_formatted = article_formatted.replace("{AuthorImage}", AUTHOR_SRC)
                 article_formatted = article_formatted.replace("{AuthorImageAltText}", author_row["image_alt"])
                 article_formatted = article_formatted.replace("{AuthorPronouns}", author_row["pronouns"])
                 article_formatted = article_formatted.replace("{AuthorMajor}", author_row["major"])
